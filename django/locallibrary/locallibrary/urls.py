@@ -17,7 +17,7 @@ urlpatterns += [
 from django.views.generic import RedirectView
 
 urlpatterns += [
-    path('', RedirectView.as_view(url='/catalog/', permanent=True)),
+    path('', RedirectView.as_view(url='/admin/', permanent=True)),
 ]
 
 # 정적 파일 제공 설정
