@@ -30,12 +30,20 @@ class Book(models.Model):
         return reverse('book-detail', args=[str(self.id)])
 
 
+from django.contrib.auth.models  import User
+from datetime import date
 # BookInstance 모델
 class BookInstance(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique whole library')  # 고유 ID
     book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)  # 어떤 책의 복사본인지 연결
     imprint = models.CharField(max_length=200)  # 출판사 정보
     due_back = models.DateField(null=True, blank=True)  # 반납 기한
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True) # 빌린사람 추가
+
+    # 연체 여부를 알려주는 함수
+    @property
+    def is_overdue(self):
+        return bool(self.due_back and date.today() > self.due_back)
 
     LOAN_STATUS = (  # 대출 상태
         ('m', 'Maintenance'),
